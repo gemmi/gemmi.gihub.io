@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .container {
+        margin-top: 10px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+      }
+      .box {
+        margin-left: 0.1em;
+        border: 1px solid red;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .underline {
+        text-decoration: underline;
+      }
+      .remove {
+        color: #ccc;
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <h2>Elimination demo</h2>
+      <div>
+        Configuration:
+        <li>
+          elimint limit: <span class="limit underline">3</span>
+          <button onClick="increaseLimit()">+</button>
+          <button onClick="decreaseLimit()">-</button>
+        </li>
+        <li>
+          input string:
+          <span class="string underline">deeedbbcccbdaa</span>
+          <button onClick="changeString()">change it</button>
+        </li>
+      </div>
+      <button onClick="start()">start</button>
+      <button onClick="stop()">stop</button>
+      <div class="container"></div>
+    </div>
+    <script src="./validator.js"></script>
+    <script src="./funny.js"></script>
+    <script>
+      function stop() {
+        const end = setInterval(function () {}, 10000);
+        for (i = 1; i <= end; i++) {
+          clearInterval(i);
+        }
+      }
+
+      const limitBox = document.querySelector('.limit');
+      let limit = limitBox.innerText - 0;
+      const strBox = document.querySelector('.string');
+      let str = strBox.innerText;
+
+      function increaseLimit() {
+        limit += 1;
+        limitBox.innerText = limit;
+      }
+
+      function decreaseLimit() {
+        limit -= 1;
+        limitBox.innerText = limit;
+      }
+
+      function changeString() {
+        str = randomStrWithDuplicateChar(
+          Math.floor(Math.random() * 20) + 10,
+          3
+        );
+        strBox.innerText = str;
+      }
+
+      function start() {
+        stop();
+        document.querySelector('.container').innerHTML = '';
+
+        const elimation = new Elimination(limit, '.container');
+        console.log(str, 1111);
+        str.split('').forEach((c) => elimation.insert(c));
+        elimation.finish();
+      }
+    </script>
+  </body>
+</html>
