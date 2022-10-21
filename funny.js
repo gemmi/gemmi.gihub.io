@@ -8,19 +8,23 @@ class Elm {
 }
 
 class AnimateQueue {
-  constructor(fn) {
+  constructor(speed = 500) {
     this.q = [];
-    fn && this.q.push(fn);
 
-    this.loop();
+    this.speed = speed;
+
+    this._loop();
     this.timer = null;
   }
 
-  loop() {
+  _loop() {
     this.timer = setInterval(() => {
       const fn = this.q.shift();
       fn && fn();
-    }, 250);
+      if (this.q.length === 0) {
+        this.stop();
+      }
+    }, this.speed);
   }
 
   nextTick(fn) {
@@ -28,17 +32,25 @@ class AnimateQueue {
   }
 
   stop() {
-    clearInterval(this.timer);
+    this._clearallTimers();
     this.timer = null;
+  }
+
+  _clearallTimers() {
+    let endTid = setTimeout(function () {});
+    for (let i = 0; i <= endTid; i++) {
+      clearTimeout(i);
+      clearInterval(i);
+    }
   }
 }
 
 class Elimination {
-  constructor(k, selector) {
+  constructor(k, selector, speed) {
     this.stack = [];
     this.limit = k;
 
-    this.animateQueue = new AnimateQueue();
+    this.animateQueue = new AnimateQueue(speed);
     this.containerDom = document.querySelector(selector);
   }
 

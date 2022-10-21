@@ -45,6 +45,21 @@
           <span class="string underline">deeedbbcccbdaa</span>
           <button onClick="changeString()">change it</button>
         </li>
+        <li>
+          <div style="display: inline-block">
+            <div style="display: flex; align-items: center">
+              speed: slower<input
+                class="speed"
+                type="range"
+                name="range"
+                min="0"
+                max="100"
+                step="10"
+                onchange="changeSpeed()"
+              />faster
+            </div>
+          </div>
+        </li>
       </div>
       <button onClick="start()">start</button>
       <button onClick="stop()">stop</button>
@@ -65,6 +80,13 @@
       const strBox = document.querySelector('.string');
       let str = strBox.innerText;
 
+      const speedBox = document.querySelector('.speed');
+      let speed = 500;
+      function changeSpeed() {
+        speed = Math.max(900 - speedBox.value * 10, 100);
+        console.log('speed should be', speed);
+      }
+
       function increaseLimit() {
         limit += 1;
         limitBox.innerText = limit;
@@ -78,7 +100,7 @@
       function changeString() {
         str = randomStrWithDuplicateChar(
           Math.floor(Math.random() * 20) + 10,
-          3
+          limit
         );
         strBox.innerText = str;
       }
@@ -87,8 +109,7 @@
         stop();
         document.querySelector('.container').innerHTML = '';
 
-        const elimation = new Elimination(limit, '.container');
-        console.log(str, 1111);
+        const elimation = new Elimination(limit, '.container', speed);
         str.split('').forEach((c) => elimation.insert(c));
         elimation.finish();
       }
